@@ -1,0 +1,89 @@
+package server;
+
+import java.io.IOException;
+import java.io.PrintStream;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Scanner;
+
+public class P2PServer {
+	public static HashMap<String,ArrayList<String>> fileMap = new HashMap<String, ArrayList<String>>();
+	
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		try{
+			ServerSocket socket = new ServerSocket(5004);
+			while(true){
+				Socket serverSocket = socket.accept();
+				
+				//thread creation
+				Thread t = new Thread(new PeerConnect(serverSocket));
+				t.start();
+			}
+			
+		}
+		catch(IOException e){
+			e.printStackTrace();
+		}
+	
+	}
+}
+
+class PeerConnect implements Runnable{
+	
+	public Socket clientSocket;
+	
+	public PeerConnect(Socket socket)throws IOException{
+		this.clientSocket = socket;
+	}
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		while(true){
+			try{
+				String option;
+				Scanner sc = new Scanner(System.in);
+				Scanner serverIn = new Scanner(clientSocket.getInputStream());
+				PrintStream serverOut = new PrintStream(clientSocket.getOutputStream());
+				option = serverIn.nextLine();
+				switch(option){
+				case "1":
+					
+					serverOut.println(option);
+					break;
+				case "2":
+					
+					serverOut.println(option);
+					break;
+				case "3":
+					
+					serverOut.println(option);
+					break;
+				case "4":
+					serverOut.println(option);
+					sc.close();
+					serverIn.close();
+					serverOut.close();
+					System.exit(0);
+					break;
+				}
+			}
+			catch(IOException e){
+				e.printStackTrace();
+			}
+			
+		}
+		
+	}
+	
+	public void registry(String peerId, String fileName) throws IOException{
+		
+	}
+	public void lookup(String fileName){
+		
+	}
+	
+}
